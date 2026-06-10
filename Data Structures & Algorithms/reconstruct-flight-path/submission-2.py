@@ -1,0 +1,22 @@
+from collections import defaultdict
+import heapq
+from typing import List
+
+class Solution:
+    def findItinerary(self, tickets: List[List[str]]) -> List[str]:
+        graph = defaultdict(list)
+
+        # build graph with min-heap
+        for src, dst in tickets:
+            heapq.heappush(graph[src], dst)
+
+        route = []
+
+        def dfs(airport):
+            while graph[airport]:
+                next_airport = heapq.heappop(graph[airport])
+                dfs(next_airport)
+            route.append(airport)
+
+        dfs("JFK")
+        return route[::-1]
